@@ -6,7 +6,9 @@ import 'package:news_app/Screens/view1.dart';
 import 'package:news_app/Screens/view2.dart';
 import 'package:news_app/Screens/view5.dart';
 import 'package:news_app/home_tabs/Newfilter.dart';
+import 'package:news_app/home_tabs/bookmark_page.dart';
 import 'package:news_app/home_tabs/home_page.dart';
+import 'package:news_app/home_tabs/search_page.dart';
 
 void main() => runApp(const NavigationBarApp());
 
@@ -108,9 +110,9 @@ class _NavigationExampleState extends State<NavigationExample> {
             Expanded(
               child: <Widget>[
                 const HomeContent(),
-                const Card2(),
+                SearchPage(),
                 const Newsfilter(),
-                Card3(),
+                const BookMarkPage(),
                 // Add more views as needed
               ][currentPageIndex],
             ),

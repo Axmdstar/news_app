@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:news_app/home.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
+import 'package:news_app/intro.dart' as intro;
 
 void main() => runApp(const Topic());
 
@@ -17,6 +19,19 @@ class _TopicState extends State<Topic> {
   final List<String> topics = [
     "science", "sports", "business", "health", "entertainment", "tech", "politics", "food", "travel"
   ];
+
+  // Map of topics to icons
+  final Map<String, IconData> topicIcons = {
+    "science": Icons.science,
+    "sports": Icons.sports_football,
+    "business": Icons.business,
+    "health": Icons.health_and_safety,
+    "entertainment": Icons.movie,
+    "tech": Icons.computer,
+    "politics": Icons.gavel,
+    "food": Icons.fastfood,
+    "travel": Icons.flight,
+  };
 
   // Track selected topics
   final Set<String> selectedTopics = {};
@@ -49,128 +64,123 @@ class _TopicState extends State<Topic> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Column(
-          children: [
-            const SizedBox(height: 20.0),
-            const Text(
+        body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 20.0),
+              const Text(
               "Choose Your Favorite Topics",
               style: TextStyle(
                 fontFamily: "Montserrat",
                 fontSize: 30,
                 fontWeight: FontWeight.w700,
                 shadows: [
-                  Shadow(
-                    blurRadius: 2.0, // shadow blur
-                    color: Colors.grey, // shadow color
-                    offset: Offset(2.0, 0.0),
-                  )
+                Shadow(
+                  blurRadius: 2.0, // shadow blur
+                  color: Colors.grey, // shadow color
+                  offset: Offset(2.0, 0.0),
+                )
                 ],
               ),
-            ),
-            const SizedBox(height: 20.0),
-            const Text(
+              ),
+              const SizedBox(height: 20.0),
+              const Text(
               "Your Favorite Topics Will be Viewed in MyNews Tab",
               style: TextStyle(
                 fontFamily: "Montserrat",
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
               ),
-            ),
-            const SizedBox(height: 20.0),
+              ),
+              const SizedBox(height: 15.0),
 
-            // GridView inside Expanded for flexible height
-            Expanded(
+              // GridView inside Expanded for flexible height
+              Expanded(
               child: GridView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // Number of columns
-                  crossAxisSpacing: 10.0,
-                  mainAxisSpacing: 10.0,
-                  childAspectRatio: 3, // Adjust to fit topic text
+                crossAxisCount: 2, // Number of columns
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0,
+                childAspectRatio: 1.5, // Adjust to make the box bigger
                 ),
                 itemCount: topics.length,
                 itemBuilder: (context, index) {
-                  final topic = topics[index];
-                  final isSelected = selectedTopics.contains(topic);
+                final topic = topics[index];
+                final isSelected = selectedTopics.contains(topic);
+                final icon = topicIcons[topic] ?? Icons.topic;
 
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (isSelected) {
-                          selectedTopics.remove(topic);
-                        } else {
-                          selectedTopics.add(topic);
-                        }
-                      });
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: isSelected ? Colors.blue : Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Text(
-                        topic,
-                        style: TextStyle(
-                          fontFamily: "Montserrat",
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: isSelected ? Colors.white : Colors.black,
-                        ),
+                return GestureDetector(
+                  onTap: () {
+                  setState(() {
+                    if (isSelected) {
+                    selectedTopics.remove(topic);
+                    } else {
+                    selectedTopics.add(topic);
+                    }
+                  });
+                  },
+                  child: Container(
+                  
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: isSelected ? Colors.blue : Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                    ],
+                    border: Border.all(
+                    color: isSelected ? Colors.blue : const Color.fromARGB(255, 255, 253, 253),
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                    Icon(
+                      icon,
+                      color: isSelected ? Colors.white : Colors.orange, // Change icon color to orange
+                    ),
+                    const SizedBox(height: 10.0),
+                    Text(
+                      topic,
+                      style: TextStyle(
+                      fontFamily: "Montserrat",
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: isSelected ? Colors.white : Colors.black,
                       ),
                     ),
-                  );
+                    ],
+                  ),
+                  ),
+                );
                 },
               ),
-            ),
-
-            // Next Button
-            PrimaryButton(
+              ),
+              
+              const SizedBox(height: 10.0), // Add space between the next button and topics
+              
+              // Next Button
+              intro.PrimaryButton(
               onTap: () async {
                 await _saveSelectedTopics(); // Save topics
                 print("Selected Topics: $selectedTopics");
                 Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => const NavigationBarApp()),
+                MaterialPageRoute(builder: (_) => const NavigationBarApp()),
                 );
               },
               text: "Next",
+              ),
+              const SizedBox(height: 10.0),
+            ],
             ),
-            const SizedBox(height: 20.0),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class PrimaryButton extends StatelessWidget {
-  final VoidCallback onTap;
-  final String text;
-
-  const PrimaryButton({required this.onTap, required this.text, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20.0),
-        padding: const EdgeInsets.symmetric(vertical: 15.0),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontFamily: "Montserrat",
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
           ),
-        ),
-      ),
+          ),
     );
   }
 }
