@@ -1,8 +1,9 @@
 // ignore: depend_on_referenced_packages
+
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
-import 'package:news_app/intro.dart';
+import "package:news_app/components/primary_button.dart";
 import 'package:news_app/lang.dart';
 
 void main() {
@@ -47,75 +48,77 @@ class MyAppState extends State<CountryPicker> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          body: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              children: [
-                const SizedBox(height: 20.0),
-                const Text(
-                  "Choose Your Country",
-                  style: TextStyle(
-                    fontFamily: "Montserrat",
-                    fontSize: 30,
-                    fontWeight: FontWeight.w700,
-                    shadows: [
-                      Shadow(
-                        blurRadius: 2.0, // shadow blur
-                        color: Colors.grey, // shadow color
-                        offset: Offset(2.0, 0.0),
-                      )
-                    ],
+          body: SafeArea(
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 20.0),
+                  const Icon(
+                    Icons.public,
+                    size: 100,
+                    color: Colors.amber,
                   ),
-                ),
-                const SizedBox(height: 20.0),
-                const Text(
-                  "Choose The Country to get you all your News from.",
-                  style: TextStyle(
-                    fontFamily: "Montserrat",
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
+                  const SizedBox(height: 20.0),
+                  const Text(
+                    "Choose Your Country",
+                    style: TextStyle(
+                      fontFamily: "Montserrat",
+                      fontSize: 30,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20.0),
-                CountryListPick(
-                  appBar: AppBar(
-                    backgroundColor: Colors.amber,
-                    title: const Text('Pick your country'),
+                  const SizedBox(height: 10.0),
+                  const Text(
+                    "Choose the country to get all your news from.",
+                    style: TextStyle(
+                      fontFamily: "Montserrat",
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                  theme: CountryTheme(
-                    isShowFlag: true,
-                    isShowTitle: true,
-                    isShowCode: false,
-                    isDownIcon: true,
-                    showEnglishName: false,
-                    labelColor: Colors.blueAccent,
+                  const SizedBox(height: 20.0),
+                  CountryListPick(
+                    appBar: AppBar(
+                      backgroundColor: Colors.amber,
+                      title: const Text('Pick your country'),
+                    ),
+                    theme: CountryTheme(
+                      isShowFlag: true,
+                      isShowTitle: true,
+                      isShowCode: false,
+                      isDownIcon: true,
+                      showEnglishName: false,
+                      labelColor: Colors.blueAccent,
+                    ),
+                    initialSelection: '+252',
+                    onChanged: (CountryCode? code) async {
+                      if (code != null) {
+                        setState(() {
+                          selectedCountry =
+                              code.name; // Store the selected country
+                        });
+                        await _saveCountry(code.name!); // Save to local storage
+                        print("Saved Country: ${code.name}");
+                      }
+                    },
                   ),
-                  initialSelection: '+252',
-                  onChanged: (CountryCode? code) async {
-                    if (code != null) {
-                      setState(() {
-                        selectedCountry =
-                            code.name; // Store the selected country
-                      });
-                      await _saveCountry(code.name!); // Save to local storage
-                      print("Saved Country: ${code.name}");
-                    }
-                  },
-                ),
-                const SizedBox(height: 410.0),
-                PrimaryButton(
-                  onTap: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (_) => const Language()),
-                    );
-                  },
-                  text: "Next",
-                ),
-              ],
+                  const Spacer(),
+                  PrimaryButton(
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (_) => const Language()),
+                      );
+                    },
+                    text: "Next",
+                  ),
+                  const SizedBox(height: 20.0),
+                ],
+              ),
             ),
           ),
-        )
-      );
+        ));
   }
 }

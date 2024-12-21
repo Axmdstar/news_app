@@ -1,10 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/Cards/card_2.dart';
-import 'package:news_app/Cards/card_3.dart';
-import 'package:news_app/Cards/card_7.dart';
-import 'package:news_app/Screens/view1.dart';
-import 'package:news_app/Screens/view2.dart';
-import 'package:news_app/Screens/view5.dart';
 import 'package:news_app/home_tabs/Newfilter.dart';
 import 'package:news_app/home_tabs/bookmark_page.dart';
 import 'package:news_app/home_tabs/home_page.dart';
@@ -14,7 +8,6 @@ void main() => runApp(const NavigationBarApp());
 
 class NavigationBarApp extends StatelessWidget {
   const NavigationBarApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,7 +19,6 @@ class NavigationBarApp extends StatelessWidget {
 
 class NavigationExample extends StatefulWidget {
   const NavigationExample({super.key});
-
   @override
   State<NavigationExample> createState() => _NavigationExampleState();
 }
@@ -87,18 +79,16 @@ class _NavigationExampleState extends State<NavigationExample> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Left: Logo/Icon
-                  // const Icon(Icons.menu, size: 30, color: Colors.black),
+                  
                   Image.asset(
                     "images/News.png",
                     height: 40,
                   ),
 
-                  // Right: Settings Icon
+                  
                   IconButton(
                     icon: const Icon(Icons.settings, size: 30),
                     onPressed: () {
-                      // Handle settings action
                       print("Settings tapped");
                     },
                   ),
@@ -113,7 +103,6 @@ class _NavigationExampleState extends State<NavigationExample> {
                 SearchPage(),
                 const Newsfilter(),
                 const BookMarkPage(),
-                // Add more views as needed
               ][currentPageIndex],
             ),
           ],

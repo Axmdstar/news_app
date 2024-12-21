@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/country.dart';
+import "package:news_app/components/primary_button.dart";
 
 class AppColors {
   static const Color kdark = Color(0xff000000);
@@ -17,7 +18,7 @@ class AppColors {
     end: Alignment.bottomCenter,
     colors: [
       const Color(0xFF110C1D).withOpacity(0.0),
-      const Color(0xFF110C1D),
+      const Color.fromARGB(255, 21, 24, 24),
     ],
   );
 }
@@ -83,11 +84,8 @@ class _NgamarOnboardingPageState extends State<NgamarOnboardingPage> {
                   if (_currentIndex == onboardingList.length - 1) {
                     // Redirect to Choose Country
                     Navigator.of(context).pushReplacement(
-                    // MaterialPageRoute(builder: (_) => const MyHomePage(title: "Hello"))
-                    MaterialPageRoute(builder: (_) => const CountryPicker())
-        
+                      MaterialPageRoute(builder: (_) => const CountryPicker())
                     );
-                    // print("Last");
                   } else {
                     _pageController.nextPage(
                       duration: const Duration(milliseconds: 500),
@@ -106,95 +104,6 @@ class _NgamarOnboardingPageState extends State<NgamarOnboardingPage> {
   }
 }
 
-
-class PrimaryButton extends StatefulWidget {
-  final VoidCallback onTap;
-  final String text;
-  final double? width;
-  final double? height;
-  final double? borderRadius;
-  final double? fontSize;
-  final Color? color;
-  const PrimaryButton({
-    required this.onTap,
-    required this.text,
-    this.height,
-    this.width,
-    this.borderRadius,
-    this.fontSize,
-    this.color,
-    super.key,
-  });
-
-  @override
-  State<PrimaryButton> createState() => _PrimaryButtonState();
-}
-
-class _PrimaryButtonState extends State<PrimaryButton>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  final Duration _animationDuration = const Duration(milliseconds: 300);
-  final Tween<double> _tween = Tween<double>(begin: 1.0, end: 0.95);
-  @override
-  void initState() {
-    _controller = AnimationController(
-      vsync: this,
-      duration: _animationDuration,
-    )..addListener(() {
-        setState(() {});
-      });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        _controller.forward().then((_) {
-          _controller.reverse();
-        });
-        widget.onTap();
-      },
-      child: ScaleTransition(
-        scale: _tween.animate(
-          CurvedAnimation(
-            parent: _controller,
-            curve: Curves.easeOut,
-            reverseCurve: Curves.easeIn,
-          ),
-        ),
-        child: Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(100),
-          ),
-          child: Container(
-            height: widget.height ?? 50,
-            alignment: Alignment.center,
-            width: widget.width ?? double.maxFinite,
-            decoration: BoxDecoration(
-              color: widget.color ?? AppColors.kgold,
-              borderRadius: BorderRadius.circular(widget.borderRadius ?? 20),
-            ),
-            child: Text(
-              widget.text,
-              style: TextStyle(
-                  color: widget.color == null ? AppColors.kgrey : Colors.black,
-                  fontSize: widget.fontSize ?? 16,
-                  fontWeight: FontWeight.w600),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class OnboardingCard extends StatelessWidget {
   final Onboarding onboarding;

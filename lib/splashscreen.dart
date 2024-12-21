@@ -61,17 +61,19 @@ with  SingleTickerProviderStateMixin
       if(await _loadUserSelects()){
         // ignore: use_build_context_synchronously
       if (!mounted) return;
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const NavigationBarApp()),
-      );
+      Navigator.pushNamed(context, '/home');
+      // Navigator.of(context).pushReplacement(
+      //   MaterialPageRoute(builder: (_) => const NavigationBarApp()),
+      // );
       
       } else {
         // ignore: use_build_context_synchronously
-        
+        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const Intro()));
       Navigator.of(context).pushReplacement(
         // MaterialPageRoute(builder: (_) => const MyHomePage(title: "Hello"))
         MaterialPageRoute(builder: (_) => const NgamarOnboardingPage())
       );
+
       }
 
       //* else Home Screen
