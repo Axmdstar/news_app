@@ -1,8 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Newsfilter extends StatelessWidget {
+class Newsfilter extends StatefulWidget {
+  static const String _savedTopicsKey = 'selected_topics'; // Storage key
   const Newsfilter({Key? key}) : super(key: key);
+
+  @override
+  _NewsfilterState createState() => _NewsfilterState();
+}
+
+class _NewsfilterState extends State<Newsfilter> {
+  List<String> selectedTopics = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSelectedTopics();
+  }
+
+  Future<void> _loadSelectedTopics() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedTopics = prefs.getStringList(Newsfilter._savedTopicsKey) ?? [];
+    setState(() {
+      selectedTopics.addAll(savedTopics);
+    });
+    print("Loaded Topics: $selectedTopics");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +37,7 @@ class Newsfilter extends StatelessWidget {
           TabBar(
             labelColor: Colors.black,
             indicatorColor: Colors.blue,
-            tabs: [
-              Tab(text: 'Topics'),
-              Tab(text: '...'),
-              Tab(text: '...'),
-            ],
+            tabs: selectedTopics.map((topic) => Tab(text: topic)).toList(),
           ),
           Expanded(
             child: TabBarView(

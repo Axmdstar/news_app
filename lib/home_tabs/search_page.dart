@@ -25,7 +25,6 @@ class _SearchPageState extends State<SearchPage> {
               textController: _textController,
               hintText: 'Search...',
             ),
-            // Add other widgets here
           ],
         ),
       ),
@@ -57,8 +56,7 @@ class SearchInput extends StatelessWidget {
         },
         decoration: InputDecoration(
           prefixIcon: const Icon(
-            Icons.search,
-            color: Color(0xff4338CA),
+            Icons.search// Do something with the input value   color: Color(0xff4338CA),
           ),
           filled: true,
           fillColor: Colors.white,
@@ -82,3 +80,5 @@ class SearchInput extends StatelessWidget {
     );
   }
 }
+
+

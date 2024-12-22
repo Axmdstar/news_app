@@ -32,7 +32,6 @@ class Card3 extends StatelessWidget {
          borderRadius: BorderRadius.circular(12)
        )
 
-
       ),
       child: Row(
         children: [
