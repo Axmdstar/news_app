@@ -1,4 +1,4 @@
-
+import 'dart:async';
 import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +8,7 @@ import 'package:news_app/Cards/card_8.dart';
 import 'package:news_app/Cards/card_news.dart';
 import 'package:news_app/components/HomeCard.dart';
 import 'package:news_app/components/newfilterCard.dart';
+import 'package:news_app/services/api_service.dart';
 
 class HomeContent extends StatefulWidget {
   const HomeContent({super.key});
@@ -16,7 +17,7 @@ class HomeContent extends StatefulWidget {
 }
 
 class _HomeContentState extends State<HomeContent> {
-  dynamic newsData;
+  // late NewsData newsData;
 
   @override
   void initState() {
@@ -48,94 +49,168 @@ class _HomeContentState extends State<HomeContent> {
     return DefaultTabController(
       length: 3,
       child: Container(
-        color: Colors.white, // Set background color to white
-        child: SingleChildScrollView(
+      color: Colors.white, // Set background color to white
+      child: SingleChildScrollView(
+        child: Column(
+        children: [
+          Container(
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: const Text(
-                  "Top News",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+            const Text(
+              "Global News",
+              style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              height: 1.5, // Add padding between text and underline
               ),
-              CarouselSlider(
-                options: CarouselOptions(
-                  autoPlay: true,
-                  height: 300,
-                  aspectRatio: 16 / 9,
-                  animateToClosest: true,
-                ),
-                items: [1, 2, 3]
-                      .map((item) => Container(
-                            width: 800.0,
-                            height: 420.0,
-                            padding: EdgeInsets.symmetric(horizontal: 1.0),
-                            child: Homecard(
-                              title: newsData['articles'][item]['title'],
-                              imageUrl: newsData['articles'][item]['urlToImage'],
-                            ),
-                          ))
-                      .toList(),
-              ),
-
-              const CardRings(),
-
-              const Gap(1),
-              const TabBar(
-                indicatorColor: Colors.amber,
-                labelColor: Colors.blue,
-                tabs: [
-                  Tab(text: "Today"),
-                  Tab(text: "This Week"),
-                  Tab(text: "This Month"),
-                ],
-              ),
-              SizedBox(
-                height: 600, // Adjust height as needed
-                child: TabBarView(
-                  children: [
-                    TodayTab(newsData),
-                    const ThisWeekTab(),
-                    const ThisMonthTab(),
-                  ],
-                ),
-              ),
+            ),
+            Container(
+              width: 64,
+              height: 4,
+              color: Colors.orange,
+            ),
             ],
           ),
+          ),
+          CarouselSlider(
+          options: CarouselOptions(
+            autoPlay: true,
+            height: 300,
+            aspectRatio: 16 / 9,
+            animateToClosest: true,
+          ),
+          items: [1, 2, 3, 4]
+            .map((item) => Container(
+                width: 800.0,
+                height: 420.0,
+                padding: EdgeInsets.symmetric(horizontal: 1.0),
+                child: Homecard(
+                webUrl: newsData['articles'][item]['url'],
+                title: newsData['articles'][item]['title'],
+                imageUrl: newsData['articles'][item]['urlToImage'],
+                ),
+              ))
+            .toList(),
+          ),
+          Container(
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+            const Text(
+              "Local News",
+              style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              height: 1.5, // Add padding between text and underline
+              ),
+            ),
+            Container(
+              width: 64,
+              height: 4,
+              color: Colors.orange,
+            ),
+            ],
+          ),
+          ),
+
+          CarouselSlider(
+          options: CarouselOptions(
+            autoPlay: true,
+            height: 300,
+            aspectRatio: 16 / 9,
+            animateToClosest: true,
+          ),
+          items: [1, 2, 3, 4]
+            .map((item) => Container(
+                width: 800.0,
+                height: 420.0,
+                padding: EdgeInsets.symmetric(horizontal: 1.0),
+                child: Homecard(
+                webUrl: newsData['articles'][item]['url'],
+                title: newsData['articles'][item]['title'],
+                imageUrl: newsData['articles'][item]['urlToImage'],
+                ),
+              ))
+            .toList(),
+          ),
+          const Gap(1),
+            Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+            const Text(
+              "Latest News",
+              style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              height: 1.5, // Add padding between text and underline
+              ),
+            ),
+            Container(
+              width: 64,
+              height: 4,
+              color: Colors.orange,
+            ),
+            ],
+            ),
+            ),
+            ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: newsData['articles'].length,
+            itemBuilder: (context, index) {
+            final article = newsData['articles'][index];
+            return 
+            Newfiltercard(
+        title: article['title'] ?? 'No title available',
+        urlToImage: article['urlToImage'] ??
+            'https://via.placeholder.com/150', // Placeholder image
+        publishedAt: article['publishedAt'] ?? 'Unknown date',
+        url: article['url'] ?? 'https://example.com',
+      );
+            },
+            ),
+        ],
         ),
       ),
+      ),
     );
+    }
   }
-}
-
 
 class TodayTab extends StatelessWidget {
-  final dynamic newsData;
-  const TodayTab(this.newsData, {super.key});
+  const TodayTab({super.key});
 
   @override
   Widget build(BuildContext context) {
+    print("TodayTab build");
+
     return ListView.builder(
       itemCount: newsData['articles'].length,
       itemBuilder: (context, index) {
-        return Newfiltercard(
-          newtitle: newsData['articles'][index]['title'] ?? "No Title",
-          imageUrl: newsData['articles'][index]['urlToImage'] ??
-              "assets/placeholder.jpg", // Fallback image
-        );
+      final article = newsData['articles'][index];
+      return Newfiltercard(
+        title: article['title'] ?? 'No title available',
+        urlToImage: article['urlToImage'] ??
+            'https://via.placeholder.com/150', // Placeholder image
+        publishedAt: article['publishedAt'] ?? 'Unknown date',
+        url: article['url'] ?? 'https://example.com',
+      );
       },
     );
   }
 }
 
+
 class ThisWeekTab extends StatelessWidget {
   const ThisWeekTab({super.key});
-
   @override
   Widget build(BuildContext context) {
     return ListView(

@@ -84,7 +84,7 @@ with  SingleTickerProviderStateMixin
 
   @override
   void dispose() {
-    // super.dispose();
+    super.dispose();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
     overlays: SystemUiOverlay.values);
   }
@@ -103,12 +103,6 @@ with  SingleTickerProviderStateMixin
         child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image(image: 
-            AssetImage(
-              "images/image-removebg-preview (1).png",
-              ),
-              width: 70.0,
-              ),
           Text(
             "JusNews",
             style: TextStyle(

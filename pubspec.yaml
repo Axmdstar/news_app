@@ -31,8 +31,6 @@ dependencies:
   flutter:
     sdk: flutter
   dots_indicator: ^3.0.0
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   shared_preferences: ^2.2.2
   cupertino_icons: ^1.0.8
   animate_do: ^3.3.4
@@ -43,8 +41,7 @@ dependencies:
   google_fonts: ^6.2.1
   gap: ^3.0.1
   carousel_slider: ^5.0.0
-  # octo_image: ^1.0.0
-  # cached_network_image: ^3.2.3
+  webview_flutter: ^4.2.2
   
 
 dev_dependencies:

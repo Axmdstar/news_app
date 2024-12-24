@@ -206,13 +206,13 @@ List<Onboarding> onboardingList = [
     bgImage: AppAssets.phone,
     title: 'Best News in Somali',
     info:
-        'Semper in cursus magna et eu varius nunc adipiscing. Elementum justo, laoreet id sem . ',
+        '',
   ),
   Onboarding(
     bgImage: AppAssets.newPapersOne,
     title: "Up to Date News",
     info:
-        'Semper in cursus magna et eu varius nunc adipiscing. Elementum justo, laoreet id sem . ',
+        '',
   ),
   Onboarding(
     bgImage: AppAssets.newPapersTwo,

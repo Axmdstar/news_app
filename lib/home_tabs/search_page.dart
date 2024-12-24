@@ -7,11 +7,19 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _textController = TextEditingController();
+  List<String> _searchResults = [];
 
   @override
   void dispose() {
     _textController.dispose();
     super.dispose();
+  }
+
+  void _performSearch(String query) {
+    // Simulate a search operation
+    setState(() {
+      _searchResults = List.generate(10, (index) => 'Result $index for "$query"');
+    });
   }
 
   @override
@@ -24,6 +32,17 @@ class _SearchPageState extends State<SearchPage> {
             SearchInput(
               textController: _textController,
               hintText: 'Search...',
+              onSearch: _performSearch,
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _searchResults.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(_searchResults[index]),
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -35,8 +54,14 @@ class _SearchPageState extends State<SearchPage> {
 class SearchInput extends StatelessWidget {
   final TextEditingController textController;
   final String hintText;
-  const SearchInput(
-      {required this.textController, required this.hintText, super.key});
+  final Function(String) onSearch;
+
+  const SearchInput({
+    required this.textController,
+    required this.hintText,
+    required this.onSearch,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -44,19 +69,21 @@ class SearchInput extends StatelessWidget {
       height: 80,
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
-            offset: const Offset(12, 26),
-            blurRadius: 50,
-            spreadRadius: 0,
-            color: Colors.grey.withOpacity(.1)),
+          offset: const Offset(12, 26),
+          blurRadius: 50,
+          spreadRadius: 0,
+          color: Colors.grey.withOpacity(.1),
+        ),
       ]),
       child: TextField(
         controller: textController,
         onChanged: (value) {
-          // Do something with the input value
+          onSearch(value);
         },
         decoration: InputDecoration(
           prefixIcon: const Icon(
-            Icons.search// Do something with the input value   color: Color(0xff4338CA),
+            Icons.search,
+            color: Color(0xff4338CA),
           ),
           filled: true,
           fillColor: Colors.white,
@@ -80,5 +107,3 @@ class SearchInput extends StatelessWidget {
     );
   }
 }
-
-

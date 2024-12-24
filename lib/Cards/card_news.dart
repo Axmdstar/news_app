@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:news_app/SingleSoucre.dart';
 
 class CardRings extends StatelessWidget {
   const CardRings({super.key});
@@ -19,17 +19,27 @@ class CardRings extends StatelessWidget {
     ];
 
     final allItems = items
-        .map((e) => CircleAvatar(
-              backgroundColor: Colors.transparent,
-              // backgroundImage: NetworkImage(e["soucre"] ?? "", scale: 1.0),
-              child: ClipOval(
+        .map((e) => GestureDetector( 
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Singlesoucre(sourceUrl: e["soucre"] ?? "", title: e["title"] ?? "")),
+            );
+          },
+          child: CircleAvatar(
+            backgroundColor: Colors.transparent,
+            child: ClipOval(
+              child: SizedBox(
+                width: 50,
+                height: 50,
                 child: Image.network(
                   e["soucre"] ?? "",
-                  fit: BoxFit.scaleDown,
-                  scale: 1.0,
+                  fit: BoxFit.cover,
                 ),
               ),
-            ))
+            ),
+          ),
+        ))
         .toList()
         .asMap()
         .map((key, item) {
