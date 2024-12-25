@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:news_app/Cards/card_8.dart';
-import 'package:news_app/Cards/card_news.dart';
 import 'package:news_app/components/HomeCard.dart';
 import 'package:news_app/components/newfilterCard.dart';
 import 'package:news_app/services/api_service.dart';
@@ -18,7 +17,6 @@ class HomeContent extends StatefulWidget {
 
 class _HomeContentState extends State<HomeContent> {
   // late NewsData newsData;
-
   @override
   void initState() {
     super.initState();
@@ -41,7 +39,6 @@ class _HomeContentState extends State<HomeContent> {
   @override
   Widget build(BuildContext context) {
     print("HomeContent build");
-
     if (newsData == null) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -88,7 +85,7 @@ class _HomeContentState extends State<HomeContent> {
                 height: 420.0,
                 padding: EdgeInsets.symmetric(horizontal: 1.0),
                 child: Homecard(
-                webUrl: newsData['articles'][item]['url'],
+                webUrl: newsData['articles'][item]['url'] ?? 'https://example.com',
                 title: newsData['articles'][item]['title'],
                 imageUrl: newsData['articles'][item]['urlToImage'],
                 ),

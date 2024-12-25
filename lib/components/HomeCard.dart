@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:news_app/sqlhelper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart' as w;
 
 
@@ -22,7 +26,7 @@ class Homecard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => WebViewScreen(url: webUrl, title: title),
+            builder: (context) => WebViewScreen(url: webUrl, title: title, imgUrl: imageUrl),
           ),
         );
       },
@@ -81,7 +85,22 @@ class Homecard extends StatelessWidget {
 class WebViewScreen extends StatelessWidget {
   final String url;
   final String title;
-  const WebViewScreen({Key? key,required this.title, required this.url}) : super(key: key);
+  final String imgUrl;
+  static const String _AddBookMarkKey = "BookMarks";
+
+  const WebViewScreen({ Key? key,
+                        required this.title,
+                        required this.url, 
+                        required this.imgUrl
+                      }) : super(key: key);
+  
+
+Future<void> _saveToBookmark(String url, String title, String imgUrl) async {
+  final newBookmark = {'url': url, 'title': title, 'imgUrl': imgUrl};
+  await DatabaseHelper.instance.insertBookmark(newBookmark);
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -92,9 +111,7 @@ class WebViewScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.bookmark_border),
-            onPressed: () {
-              //! Add to Bookmark
-            },
+            onPressed: () => _saveToBookmark(url, title, imgUrl),
           ),
         ],
       ),

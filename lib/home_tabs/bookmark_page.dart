@@ -1,74 +1,131 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/sqlhelper.dart';
 
-class BookMarkPage extends StatelessWidget {
+
+class BookMarkPage extends StatefulWidget {
   const BookMarkPage({super.key});
-
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Card3(),
-        Card3(),
-        Card3(),
-        Card3(),
-      ],
-    );
-  }
+  _BookMarkPageState createState() => _BookMarkPageState();
 }
 
+class _BookMarkPageState extends State<BookMarkPage> {
+  List<Map<String, dynamic>> userBookmarks = []; // Use a strongly typed list
 
-class Card3 extends StatelessWidget {
-  const Card3({Key? key}) : super(key: key);
+  Future<List<Map<String, dynamic>>> getBookmarks() async {
+    var bookmarks = await DatabaseHelper.instance.getBookmarks();
+    print("##############################################");
+    print(bookmarks);
+    setState(() {
+      userBookmarks = bookmarks;
+    });
+    return bookmarks;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch bookmarks and update state
+    getBookmarks();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      height: 136,
-      width: double.infinity,
-      decoration: ShapeDecoration(
-          color:const Color(0xFFF7F6FA),
-       shape: RoundedRectangleBorder(
-         borderRadius: BorderRadius.circular(12)
-       )
-
-      ),
-      child: Row(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
         children: [
-          Expanded(child: Container(
-            padding:const EdgeInsets.all(16),
-            child:  const Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-               const  Text("Constructive and destructive waves", style: TextStyle(
-                  color: Color(0xFF29272E),
-                  fontSize: 16,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w600,
-                  height: 0,
-                  letterSpacing: -0.64,
-                ),),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Icon(Icons.bookmark_border, color: Colors.black, size: 24,)
-                  ],
-                )
-              ],
+          const SizedBox(height: 16),
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Bookmarks",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 24,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w600,
+                height: 0,
+                letterSpacing: -0.96,
+              ),
             ),
-          )),
-          Container(
-            height: 136,
-            width: 148,
-            decoration: const BoxDecoration(
-              image: DecorationImage(image: NetworkImage("https://s3-alpha-sig.figma.com/img/234b/2a75/407c63c81bbefe9dce7316920415ce51?Expires=1704067200&Signature=Tz8~chAPIx1vszCFzqWtOb8vWpk~gACjJi-KQd-nSOZIsSc--EfxT6av7UR849GzYT77XjPv72M1pgo8bgsK9AOro1LUMnqI7MraqlZ4q-X8FE~QUU67fkQAjZu1ep5uYkleMs42dgQipwVXvB~agOqzQ3d3QsYCDOIkevwD~mylZ1HRkIcaTt7NS~Xk-cx3w5t23pMmsfkRMZI498bVouZc9B33u~9X3-r9v8CIENBOwGD79If8YyrJJexFNqIOls6BFdmrhtklJd-jftkwOkUEws-ItsF10gfb-kr4qhXWdP-pkrKxKDqci6TESs~sl6oB7mbCM8hXPASBDZKwTA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4"), fit: BoxFit.fill
-              )
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: ListView.builder(
+              itemCount: userBookmarks.length,
+              itemBuilder: (context, index) {
+                return BookmarKCard(
+                  url: userBookmarks[index]['url'] ?? '',
+                  title: userBookmarks[index]['title'] ?? '',
+                  imgUrl: userBookmarks[index]['imgUrl'] ?? '',
+                  id: userBookmarks[index]['id'] ?? 0,
+                );
+              },
             ),
-
-          )
+          ),
         ],
       ),
     );
   }
 }
 
+class BookmarKCard extends StatefulWidget {
+  final String url;
+  final String title;
+  final String imgUrl;
+  final int id;
+
+  BookmarKCard({Key? key, required this.url, required this.imgUrl, required this.title, required this.id}) : super(key: key);
+
+  @override
+  _BookmarKCardState createState() => _BookmarKCardState();
+}
+
+class _BookmarKCardState extends State<BookmarKCard> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100,
+      width: double.infinity,
+      clipBehavior: Clip.antiAlias,
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        color: const Color(0xFFF7F6FA),
+      ),
+      child: Row(
+        children: [
+          Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+              image: DecorationImage(image: NetworkImage(widget.imgUrl), fit: BoxFit.fill),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                widget.title,
+                style: TextStyle(
+                  color: Color(0xFF29272E),
+                  fontSize: 16,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w600,
+                  height: 0,
+                  letterSpacing: -0.64,
+                ),
+              ),
+            ),
+          ),
+          IconButton(
+            icon: Icon(Icons.delete, color: Colors.red),
+            onPressed: () {
+              // Implement delete functionality here
+              DatabaseHelper.instance.deleteBookmark(widget.id);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -65,7 +65,7 @@ class _NavigationExampleState extends State<NavigationExample> {
           children: [
             // Top Bar
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 boxShadow: [

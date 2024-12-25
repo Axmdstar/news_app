@@ -42,7 +42,8 @@ dependencies:
   gap: ^3.0.1
   carousel_slider: ^5.0.0
   webview_flutter: ^4.2.2
-  
+  sqflite: ^2.2.0
+  path: ^1.8.3
 
 dev_dependencies:
   flutter_test:

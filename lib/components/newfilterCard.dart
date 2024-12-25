@@ -24,7 +24,7 @@ class _NewfiltercardState extends State<Newfiltercard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => WebViewScreen(url: widget.url, title: widget.title),
+            builder: (context) => WebViewScreen(url: widget.url, title: widget.title, imgUrl: widget.urlToImage),
           ),
         );
       },

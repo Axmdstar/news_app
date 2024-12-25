@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:news_app/home.dart';
 import 'package:news_app/intro.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:news_app/main.dart';
+
 class AppColors {
   static const Color kdark = Color(0xff000000);
   static const Color klightdard = Color(0xff14213D);
@@ -12,7 +11,6 @@ class AppColors {
   static const Color kwhite = Color(0xffFFFFFF);
   // static const Color kPrimary = Color(0xFFD1A661);
   // static const Color kWhite = Color(0xFFFEFEFE);
-
   static LinearGradient customOnboardingGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
@@ -22,6 +20,8 @@ class AppColors {
     ],
   );
 }
+
+
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -114,10 +114,7 @@ with  SingleTickerProviderStateMixin
         ],
       ),
       )
-      
-      
-            )
-      ,
+    ),
     );
   }
 }
