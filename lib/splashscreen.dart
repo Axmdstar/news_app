@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:news_app/intro.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:news_app/services/api_service.dart' as api;
+// import 'package:shared_preferences/shared_preferences.dart';
 
 class AppColors {
   static const Color kdark = Color(0xff000000);
@@ -33,52 +34,23 @@ class Splashscreen extends StatefulWidget {
 class _SplashscreenState extends State<Splashscreen> 
 with  SingleTickerProviderStateMixin
 {
-  static const String _savedCountryKey = 'selected_country'; // Key for storage
-  static const String _savedLanguageKey = 'selected_language'; // Storage key
-  static const String _savedTopicsKey = 'selected_topics'; // Storage key
-
-  Future<bool> _loadUserSelects() async {
-      final prefs = await SharedPreferences.getInstance();
-      String? lang = prefs.getString(_savedLanguageKey);
-      List<String>? topic = prefs.getStringList(_savedTopicsKey);
-      String? country = prefs.getString(_savedCountryKey);
-    
-      print("Loaded : $lang");
-      print("Loaded Topic: $topic");
-      print("Loaded Country: $country");
-
-      bool hasData =  lang != null && topic != null && country != null;
-      return hasData;
-    }
 
   @override
   void initState() {
     super.initState();
+    api.loadUserSelects();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     Future.delayed(const Duration(seconds: 3), () async {
 
       //* if User new first time Opening redirect to intro Screen 
-      if(await _loadUserSelects()){
-        // ignore: use_build_context_synchronously
+      if(api.country != null && api.topic != null && api.lang != null){
       if (!mounted) return;
       Navigator.pushNamed(context, '/home');
-      // Navigator.of(context).pushReplacement(
-      //   MaterialPageRoute(builder: (_) => const NavigationBarApp()),
-      // );
-      
       } else {
-        // ignore: use_build_context_synchronously
-        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const Intro()));
-      Navigator.of(context).pushReplacement(
-        // MaterialPageRoute(builder: (_) => const MyHomePage(title: "Hello"))
+        Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const NgamarOnboardingPage())
       );
-
       }
-
-      //* else Home Screen
-
-      
     });
   }
 
@@ -104,7 +76,7 @@ with  SingleTickerProviderStateMixin
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "JusNews",
+            "MineNews",
             style: TextStyle(
               fontFamily: "Montserrat",
               fontSize: 30,

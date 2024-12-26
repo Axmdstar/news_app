@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 class Card21 extends StatelessWidget {
-  const Card21({Key? key}) : super(key: key);
+  const Card21({super.key});
 
   @override
   Widget build(BuildContext context) {

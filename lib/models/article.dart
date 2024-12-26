@@ -3,7 +3,7 @@ import 'package:news_app/services/api_service.dart';
 
 
 class ArticlePage extends StatefulWidget {
-  const ArticlePage({Key? key}) : super(key: key);
+  const ArticlePage({super.key});
 
   @override
   _ArticlePageState createState() => _ArticlePageState();
@@ -20,7 +20,7 @@ class _ArticlePageState extends State<ArticlePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Articles'),
+        title: const Text('Articles'),
       ),
       body: ListView.builder(
         itemCount: newsData['articles']?.length ?? 0,

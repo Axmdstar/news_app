@@ -1,31 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
 import 'package:news_app/components/HomeCard.dart';
 
 
-class Newfiltercard extends StatefulWidget {
-  final String title;
-  final String urlToImage;
-  final String publishedAt;
-  final String url;
+class Topicscards extends StatefulWidget {
+  String? title;
+  String? urlToImage;
+  String? publishedAt;
+  String? url;
+  final String topic;
 
-
-  const Newfiltercard({super.key, required this.title, required this.urlToImage, required this.publishedAt, required this.url});
+  Topicscards({super.key, required this.topic});
 
   @override
   _NewfiltercardState createState() => _NewfiltercardState();
 }
 
-class _NewfiltercardState extends State<Newfiltercard> {
+class _NewfiltercardState extends State<Topicscards> {
   @override
   Widget build(BuildContext context) {
+    print(widget.topic);
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => WebViewScreen(url: widget.url, title: widget.title, imgUrl: widget.urlToImage),
+            builder: (context) => WebViewScreen(
+              url: widget.url ?? '', 
+              title: widget.title ?? '', 
+              imgUrl: widget.urlToImage ?? ''),
           ),
         );
       },
@@ -40,7 +43,7 @@ class _NewfiltercardState extends State<Newfiltercard> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               image: DecorationImage(
-                image: NetworkImage(widget.urlToImage),
+                image: NetworkImage(widget.urlToImage ?? ''),
                 fit: BoxFit.cover,
               ),
             ),
@@ -52,7 +55,7 @@ class _NewfiltercardState extends State<Newfiltercard> {
               children: [
                 const Gap(8),
                 Text(
-                  widget.title,
+                  widget.title ?? '',
                   style: const TextStyle(
                     color: Color(0xFF29272E),
                     fontSize: 14,
@@ -63,10 +66,8 @@ class _NewfiltercardState extends State<Newfiltercard> {
                     overflow: TextOverflow.clip,
                   ),
                 ),
-                Text(
-                  DateFormat("MMMM dd, HH:mm")
-    .format(DateFormat("yyyy-MM-ddTHH:mm:ssZ").parse(widget.publishedAt, true)),
-
+                const Text(
+                  'October 30, 2023',
                   style: TextStyle(
                     color: Color(0xFFA7A5AC),
                     fontSize: 14,

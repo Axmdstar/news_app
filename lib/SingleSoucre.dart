@@ -24,7 +24,7 @@ class _SinglesoucreState extends State<Singlesoucre> {
       appBar: AppBar(
         title: Text(widget.title ?? "CNN"),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -66,7 +66,7 @@ class _SinglesoucreState extends State<Singlesoucre> {
                 left: 20.0,
                 child: Text(
                   widget.title ?? "Title",
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,
@@ -80,7 +80,7 @@ class _SinglesoucreState extends State<Singlesoucre> {
               itemCount: 10,
               itemBuilder: (context, index) {
                 return 
-                Card4();
+                const Card4();
               },
             ),
           ),

@@ -3,6 +3,8 @@ import 'package:news_app/home_tabs/Newfilter.dart';
 import 'package:news_app/home_tabs/bookmark_page.dart';
 import 'package:news_app/home_tabs/home_page.dart';
 import 'package:news_app/home_tabs/search_page.dart';
+import 'package:news_app/home_tabs/setting_page.dart';
+
 
 void main() => runApp(const NavigationBarApp());
 
@@ -89,7 +91,7 @@ class _NavigationExampleState extends State<NavigationExample> {
                   IconButton(
                     icon: const Icon(Icons.settings, size: 30),
                     onPressed: () {
-                      print("Settings tapped");
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingPage()));
                     },
                   ),
                 ],

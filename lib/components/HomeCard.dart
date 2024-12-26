@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:news_app/sqlhelper.dart';
@@ -13,11 +12,11 @@ class Homecard extends StatelessWidget {
   final String webUrl;
 
   const Homecard({
-    Key? key,
+    super.key,
     required this.title,
     required this.imageUrl,
     required this.webUrl,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +34,7 @@ class Homecard extends StatelessWidget {
         width: 900,
         decoration: ShapeDecoration(
           image: DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.fitHeight),
-          shape: RoundedRectangleBorder(),
+          shape: const RoundedRectangleBorder(),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -88,19 +87,17 @@ class WebViewScreen extends StatelessWidget {
   final String imgUrl;
   static const String _AddBookMarkKey = "BookMarks";
 
-  const WebViewScreen({ Key? key,
+  const WebViewScreen({ super.key,
                         required this.title,
                         required this.url, 
                         required this.imgUrl
-                      }) : super(key: key);
+                      });
   
 
 Future<void> _saveToBookmark(String url, String title, String imgUrl) async {
   final newBookmark = {'url': url, 'title': title, 'imgUrl': imgUrl};
   await DatabaseHelper.instance.insertBookmark(newBookmark);
 }
-
-
 
   @override
   Widget build(BuildContext context) {

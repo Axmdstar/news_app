@@ -107,8 +107,8 @@ void main() {
 
   print('Status: ${news.status}');
   print('Total Results: ${news.totalResults}');
-  news.articles.forEach((article) {
+  for (var article in news.articles) {
     print('Title: ${article.title}');
     print('Author: ${article.author}');
-  });
+  }
 }

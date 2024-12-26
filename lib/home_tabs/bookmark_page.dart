@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/components/HomeCard.dart';
 import 'package:news_app/sqlhelper.dart';
 
 
@@ -9,12 +10,10 @@ class BookMarkPage extends StatefulWidget {
 }
 
 class _BookMarkPageState extends State<BookMarkPage> {
-  List<Map<String, dynamic>> userBookmarks = []; // Use a strongly typed list
+  List<Map<String, dynamic>> userBookmarks = []; 
 
   Future<List<Map<String, dynamic>>> getBookmarks() async {
     var bookmarks = await DatabaseHelper.instance.getBookmarks();
-    print("##############################################");
-    print(bookmarks);
     setState(() {
       userBookmarks = bookmarks;
     });
@@ -24,7 +23,6 @@ class _BookMarkPageState extends State<BookMarkPage> {
   @override
   void initState() {
     super.initState();
-    // Fetch bookmarks and update state
     getBookmarks();
   }
 
@@ -75,7 +73,11 @@ class BookmarKCard extends StatefulWidget {
   final String imgUrl;
   final int id;
 
-  BookmarKCard({Key? key, required this.url, required this.imgUrl, required this.title, required this.id}) : super(key: key);
+  const BookmarKCard({ super.key, 
+  required this.url, 
+  required this.imgUrl, 
+  required this.title, 
+  required this.id});
 
   @override
   _BookmarKCardState createState() => _BookmarKCardState();
@@ -84,7 +86,20 @@ class BookmarKCard extends StatefulWidget {
 class _BookmarKCardState extends State<BookmarKCard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+
+    return GestureDetector(
+      onTap: () => {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => WebViewScreen(
+              url: widget.url, 
+              title: widget.title, 
+              imgUrl: widget.imgUrl),
+          ),
+        )
+      },
+      child: Container(
       height: 100,
       width: double.infinity,
       clipBehavior: Clip.antiAlias,
@@ -103,29 +118,30 @@ class _BookmarKCardState extends State<BookmarKCard> {
           ),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(5),
+              width: 10,
               child: Text(
                 widget.title,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Color(0xFF29272E),
                   fontSize: 16,
                   fontFamily: 'Inter',
                   fontWeight: FontWeight.w600,
-                  height: 0,
-                  letterSpacing: -0.64,
+                  overflow: TextOverflow.fade,
+                  
                 ),
               ),
             ),
           ),
           IconButton(
-            icon: Icon(Icons.delete, color: Colors.red),
+            icon: const Icon(Icons.delete, color: Colors.red),
             onPressed: () {
-              // Implement delete functionality here
               DatabaseHelper.instance.deleteBookmark(widget.id);
             },
           ),
         ],
       ),
+    )
     );
   }
 }

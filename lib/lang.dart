@@ -89,7 +89,7 @@ class _LanguageState extends State<Language> {
                         RadioListTile<String>(
                           title: const Text("English"),
                           
-                          value: "English",
+                          value: "en",
                           groupValue: selectedLanguage,
                           onChanged: (value) {
                             setState(() {
@@ -100,7 +100,7 @@ class _LanguageState extends State<Language> {
                         ),
                         RadioListTile<String>(
                           title: const Text("Arabic"),
-                          value: "Arabic",
+                          value: "ar",
                           groupValue: selectedLanguage,
                           onChanged: (value) {
                             setState(() {

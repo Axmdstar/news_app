@@ -1,5 +1,3 @@
-// ignore: depend_on_referenced_packages
-
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +10,6 @@ void main() {
 
 class CountryPicker extends StatefulWidget {
   const CountryPicker({super.key});
-
   @override
   MyAppState createState() => MyAppState();
 }
@@ -98,10 +95,9 @@ class MyAppState extends State<CountryPicker> {
                       if (code != null) {
                         setState(() {
                           selectedCountry =
-                              code.name; // Store the selected country
+                              code.code; // Store the selected country
                         });
-                        await _saveCountry(code.name!); // Save to local storage
-                        print("Saved Country: ${code.name}");
+                        await _saveCountry(code.code!); // Save to local storage
                       }
                     },
                   ),

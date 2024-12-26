@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 
 
 class Card14 extends StatelessWidget {
-  const Card14({Key? key}) : super(key: key);
+  const Card14({super.key});
 
   @override
   Widget build(BuildContext context) {

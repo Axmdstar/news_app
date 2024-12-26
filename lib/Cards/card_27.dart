@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 class Card27 extends StatelessWidget {
-  const Card27({Key? key}) : super(key: key);
+  const Card27({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +70,9 @@ class Card27 extends StatelessWidget {
             child: FilledButton(
               onPressed: null,
               style: ButtonStyle(
-                  padding: const MaterialStatePropertyAll( EdgeInsets.all(12),),
-                  backgroundColor: const MaterialStatePropertyAll(Color(0xFF7949FF),),
-                  shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),)
+                  padding: const WidgetStatePropertyAll( EdgeInsets.all(12),),
+                  backgroundColor: const WidgetStatePropertyAll(Color(0xFF7949FF),),
+                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),)
               ),
               child: const Text(
                 'Apply',
