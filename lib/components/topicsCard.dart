@@ -1,88 +1,149 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:news_app/components/HomeCard.dart';
+import 'package:news_app/services/api_service.dart' as api; // Ensure this is the correct import
+// import 'package:news_app/screens/WebViewScreen.dart'; // Assuming WebViewScreen is defined elsewhere
 
-
-class Topicscards extends StatefulWidget {
-  String? title;
-  String? urlToImage;
-  String? publishedAt;
-  String? url;
+class TopicsCards extends StatefulWidget {
   final String topic;
-
-  Topicscards({super.key, required this.topic});
-
+  const TopicsCards({super.key, required this.topic});
   @override
-  _NewfiltercardState createState() => _NewfiltercardState();
+  _TopicsCardsState createState() => _TopicsCardsState();
 }
 
-class _NewfiltercardState extends State<Topicscards> {
+class _TopicsCardsState extends State<TopicsCards> {
+  List<dynamic> _topicResults = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchTopicNews();
+  }
+
+  Future<void> _fetchTopicNews() async {
+    try {
+      final results = await api.newsOnTopic(widget.topic);
+      setState(() {
+        _topicResults = results;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print("Error fetching topic news: $e");
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(widget.topic);
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => WebViewScreen(
-              url: widget.url ?? '', 
-              title: widget.title ?? '', 
-              imgUrl: widget.urlToImage ?? ''),
-          ),
-        );
-      },
-      child:  Container(
-      height: 123,
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          Container(
-            width: 124,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(
-                image: NetworkImage(widget.urlToImage ?? ''),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          const Gap(16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Gap(8),
-                Text(
-                  widget.title ?? '',
-                  style: const TextStyle(
-                    color: Color(0xFF29272E),
-                    fontSize: 14,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w400,
-                    height: 0,
-                    letterSpacing: -0.56,
-                    overflow: TextOverflow.clip,
+    return Scaffold(
+      body: 
+        Container( color: Colors.white,
+          child: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: _topicResults.length,
+              itemBuilder: (context, index) {
+                final article = _topicResults[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => WebViewScreen(
+                          url: article['url'] ?? '',
+                          title: article['title'] ?? '',
+                          imgUrl: article['urlToImage'] ?? '',
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    height: 123,
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          spreadRadius: 3,
+                          offset: const Offset(2, 6)
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 124,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            image: DecorationImage(
+                              image: NetworkImage(article['urlToImage'] ?? ''),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        const Gap(16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                article['title'] ?? 'No Title',
+                                style: const TextStyle(
+                                  color: Color(0xFF29272E),
+                                  fontSize: 14,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w400,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                maxLines: 2,
+                              ),
+                              const Gap(8),
+                              Text(
+                                article['publishedAt'] ?? 'Unknown Date',
+                                style: const TextStyle(
+                                  color: Color(0xFFA7A5AC),
+                                  fontSize: 12,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const Text(
-                  'October 30, 2023',
-                  style: TextStyle(
-                    color: Color(0xFFA7A5AC),
-                    fontSize: 14,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w400,
-                    height: 0,
-                    letterSpacing: -0.56,
-                  ),
-                ),
-              ],
+                );
+              },
             ),
-          ),
-        ],
-      ),
-    )
-  );
+        )
+          
+    );
   }
 }
+
+// Future<List<dynamic>> newsOnTopic(String category) async {
+//   const headlineEndpoint1 = "https://example.com/api/news"; // Replace with your API endpoint
+//   try {
+//     final response = await http.get(Uri.parse("$headlineEndpoint1&category=$category"));
+//     final responseBody = utf8.decode(response.bodyBytes);
+//     final parsedData = jsonDecode(responseBody);
+
+//     print("###################################");
+//     print("$headlineEndpoint1&category=$category");
+
+//     return parsedData['articles'] as List<dynamic>; // Assuming the response contains "articles"
+//   } catch (e) {
+//     print(e);
+//     return [];
+//   }
+// }

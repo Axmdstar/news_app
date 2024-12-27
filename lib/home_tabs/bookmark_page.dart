@@ -28,7 +28,10 @@ class _BookMarkPageState extends State<BookMarkPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return 
+    Container(
+      color: Colors.white,
+      child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
@@ -49,7 +52,10 @@ class _BookMarkPageState extends State<BookMarkPage> {
           ),
           const SizedBox(height: 16),
           Expanded(
-            child: ListView.builder(
+            child: 
+            Container(
+              color: Colors.white,
+              child: ListView.builder(
               itemCount: userBookmarks.length,
               itemBuilder: (context, index) {
                 return BookmarKCard(
@@ -60,10 +66,14 @@ class _BookMarkPageState extends State<BookMarkPage> {
                 );
               },
             ),
+            )
+            
           ),
         ],
       ),
-    );
+    ),
+    )
+    ;
   }
 }
 
@@ -88,25 +98,38 @@ class _BookmarKCardState extends State<BookmarKCard> {
   Widget build(BuildContext context) {
 
     return GestureDetector(
-      onTap: () => {
+      onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => WebViewScreen(
-              url: widget.url, 
-              title: widget.title, 
-              imgUrl: widget.imgUrl),
+              url: widget.url,
+              title: widget.title,
+              imgUrl: widget.imgUrl,
+            ),
           ),
-        )
+        );
       },
       child: Container(
+        
+      margin: const EdgeInsets.symmetric(vertical: 10.0),
       height: 100,
       width: double.infinity,
       clipBehavior: Clip.antiAlias,
-      decoration: ShapeDecoration(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        color: const Color(0xFFF7F6FA),
-      ),
+      decoration: 
+      BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          spreadRadius: 3,
+                          offset: const Offset(2, 6)
+                        ),
+                      ],
+                    ),
+      
       child: Row(
         children: [
           Container(

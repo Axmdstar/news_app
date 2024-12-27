@@ -10,7 +10,6 @@ class Newfiltercard extends StatefulWidget {
   final String publishedAt;
   final String url;
 
-
   const Newfiltercard({super.key, required this.title, required this.urlToImage, required this.publishedAt, required this.url});
 
   @override
@@ -30,14 +29,36 @@ class _NewfiltercardState extends State<Newfiltercard> {
         );
       },
       child:  Container(
+        margin: EdgeInsets.symmetric(horizontal: 2.0, vertical: 5.0),
+        decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 3,
+                          spreadRadius: 2,
+                          offset: const Offset(2, 6)
+                        ),
+                      ],
+                    ),
       height: 123,
       width: double.infinity,
       padding: const EdgeInsets.all(16),
+      // margin: ,
       child: Row(
         children: [
           Container(
             width: 124,
             decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  offset: const Offset(12, 26),
+                  blurRadius: 50,
+                  spreadRadius: 0,
+                  color: Colors.black.withOpacity(.1),
+                )
+              ],
               borderRadius: BorderRadius.circular(12),
               image: DecorationImage(
                 image: NetworkImage(widget.urlToImage),
@@ -67,7 +88,7 @@ class _NewfiltercardState extends State<Newfiltercard> {
                   DateFormat("MMMM dd, HH:mm")
     .format(DateFormat("yyyy-MM-ddTHH:mm:ssZ").parse(widget.publishedAt, true)),
 
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Color(0xFFA7A5AC),
                     fontSize: 14,
                     fontFamily: 'Inter',

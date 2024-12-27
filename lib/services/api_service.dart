@@ -1,7 +1,4 @@
-
-
 import 'package:http/http.dart' as http;
-import 'package:news_app/demo.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,12 +17,13 @@ String headlineEndpoint1 = "https://newsapi.org/v2/top-headlines?apiKey=$newapi_
 String everythingEndpoint1 = "https://newsapi.org/v2/everything?apiKey=$newapi_apiKey";
 String headlineEndpoint2 = "https://api.thenewsapi.com/v1/news/top?api_token=$thenewapi_apiKey";
 String everythingEndpint2 = "https://api.thenewsapi.com/v1/news/all?api_token=$thenewapi_apiKey";
-// String lang = 
+
 Map<String, dynamic> newsData = {};
 Map<String, dynamic> globalnewsData = {};
 Map<String, dynamic> localnewsData = {};
+Map<String, dynamic> searchList = {};
 
-
+// Load User set up data
 Future<void> loadUserSelects() async {
       final prefs = await SharedPreferences.getInstance();
       lang = prefs.getString(_savedLanguageKey)?.toLowerCase();
@@ -35,7 +33,7 @@ Future<void> loadUserSelects() async {
       print("Loaded Topic: $topic");
       print("Loaded Country: $country");
 }
-
+// Test Demo Json
 Future<void> loadJsonData() async {
   try {
     final jsonData = await rootBundle.loadString('demo.json');
@@ -46,8 +44,7 @@ Future<void> loadJsonData() async {
     print("Error loading JSON: $e");
   }
 }
-
-
+// Get Local News
 Future<void> LocalNews() async {
   try {
     final response = await http.get(Uri.parse("$everythingEndpoint1&q=bitcoin"));
@@ -58,7 +55,7 @@ Future<void> LocalNews() async {
     print("Error loading JSON: $e"); 
   }
 }
-
+// Get Latest News
 Future<void> latestNews() async {
   try {
     final response = await http.get(Uri.parse("$everythingEndpoint1&q=bitcoin"));
@@ -68,21 +65,55 @@ Future<void> latestNews() async {
     print("Error loading JSON: $e"); 
   }
 }
-
+// Get Global News
 Future<void> globalNews() async {
   try {
     final response = await http.get(Uri.parse("$everythingEndpint2&limit=3&language=$lang"));
     final responseBody = utf8.decode(response.bodyBytes);
     final parsedData = jsonDecode(responseBody);
     globalnewsData = adaptJson1ToJson2(parsedData);
+
     print("###############################");
     print("$everythingEndpint2&limit=3&language=$lang");
+
   } catch (e) {
     print("Error loading JSON: $e"); 
   }
 }
+// Search News
+Future<dynamic> SearchNews(String query) async {
+  try {
+    final response = await http.get(Uri.parse("$everythingEndpoint1&q=$query"));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final parsedData = jsonDecode(responseBody);
 
+    print("###################################");
+    print("$everythingEndpoint1&q=$query");
 
+    return parsedData['articles'] as List<dynamic>; // Assuming response contains "articles"
+  } catch (e) {
+    print(e);
+    return [];
+  }
+}
+// News Based on Topic
+Future<dynamic> newsOnTopic(String category) async {
+  try {
+    final response = await http.get(Uri.parse("$headlineEndpoint1&category=$category"));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final parsedData = jsonDecode(responseBody);
+
+    print("###################################");
+    print("$headlineEndpoint1&category=$category");
+
+    return parsedData['articles'] as List<dynamic>; // Assuming the response contains "articles"
+  } catch (e) {
+    print(e);
+    return [];
+  }
+}
+
+// Adapter for Json 2
 Map<String, dynamic> adaptJson1ToJson2(Map<String, dynamic> json1) {
   return {
     "status": "ok",

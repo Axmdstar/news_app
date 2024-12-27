@@ -8,8 +8,8 @@ class AppColors {
   static const Color kdark = Color(0xff000000);
   static const Color klightdard = Color(0xff14213D);
   static const Color kgold = Color(0xffFCA311);
-  static const Color kgrey = Color(0xffE5E5E5);
-  static const Color kwhite = Color(0xffFFFFFF);
+  static const Color kgrey = Color.fromARGB(255, 229, 229, 229);
+  static const Color kwhite = Color.fromARGB(255, 255, 255, 255);
   // static const Color kPrimary = Color(0xFFD1A661);
   // static const Color kWhite = Color(0xFFFEFEFE);
   static LinearGradient customOnboardingGradient = LinearGradient(

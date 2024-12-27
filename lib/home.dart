@@ -32,6 +32,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: NavigationBar(
+        backgroundColor: Colors.white,
         onDestinationSelected: (int index) {
           setState(() {
             currentPageIndex = index;
@@ -39,29 +40,32 @@ class _NavigationExampleState extends State<NavigationExample> {
         },
         indicatorColor: Colors.amber,
         selectedIndex: currentPageIndex,
+        indicatorShape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+        elevation: 12,
         destinations: const <Widget>[
           NavigationDestination(
-            selectedIcon: Icon(Icons.home),
+            selectedIcon: Icon(Icons.home, color: Colors.white),
             icon: Icon(Icons.home_outlined),
             label: 'Home',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.search),
+            selectedIcon: Icon(Icons.search, color: Colors.white),
             icon: Icon(Icons.search_outlined),
             label: 'Search',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.star),
+            selectedIcon: Icon(Icons.star, color: Colors.white),
             icon: Icon(Icons.star_outline),
             label: 'MyNews',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.bookmark),
+            selectedIcon: Icon(Icons.bookmark, color: Colors.white),
             icon: Icon(Icons.bookmark_outline),
             label: 'Bookmark',
           ),
         ],
       ),
+
       body: SafeArea(
         child: Column(
           children: [

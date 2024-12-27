@@ -22,8 +22,9 @@ class _HomeContentState extends State<HomeContent> {
   }
 
   Future<void> _loadData() async {
-    await api.loadJsonData(); // Load JSON data
-    await api.globalNews();
+    // await api.loadJsonData(); // Load JSON data
+    await api.LocalNews();
+    await api.globalNews(); 
     setState(() {
       isLoading = false; // Set loading to false once data is loaded
     });
@@ -33,8 +34,13 @@ class _HomeContentState extends State<HomeContent> {
   Widget build(BuildContext context) {
     // Show a loading indicator while data is being loaded
     if (isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
+      return  Container(
+        width: double.maxFinite,
+        height: double.maxFinite,
+        color: Colors.white,
+        child: Center(
+          child: CircularProgressIndicator(color: Colors.amberAccent,),
+        )
       );
     }
 
@@ -45,7 +51,7 @@ class _HomeContentState extends State<HomeContent> {
     return DefaultTabController(
       length: 3,
       child: Container(
-        color: Colors.white, // Set background color to white
+        color: const Color.fromARGB(255, 255, 255, 255), // Set background color to white
         child: SingleChildScrollView(
           child: Column(
             children: [

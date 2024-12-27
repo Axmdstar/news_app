@@ -32,20 +32,36 @@ class _NewsfilterState extends State<Newsfilter> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: selectedTopics.length,
-      child: Column(
+      child: 
+      Container(
+        color: Colors.white,
+        child: Column(
         children: [
           TabBar(
             labelColor: Colors.black,
-            indicatorColor: Colors.blue,
+            isScrollable: true,
+            labelPadding: EdgeInsets.symmetric(horizontal: 20.0),
+            textScaler: TextScaler.linear(1.0),
+            labelStyle: TextStyle(
+              fontFamily: "Montserrat",
+              fontWeight: FontWeight.w600
+            ),
+            indicatorColor: Colors.amber,
             tabs: selectedTopics.map((topic) => Tab(text: topic)).toList(),
           ),
           Expanded(
-            child: TabBarView(
-              children: selectedTopics.map((topic) => Topicscards(topic: topic) ).toList(),
+            child: 
+            Container(
+              color: Colors.white,
+              child: TabBarView(
+              children: selectedTopics.map((topic) => TopicsCards(topic: topic) ).toList(),
             ),
+            )
           ),
         ],
       ),
+      )
+      
     );
   }
 }

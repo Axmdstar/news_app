@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:news_app/services/api_service.dart' as api;
@@ -78,11 +79,15 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
+      backgroundColor: Colors.white,
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          // Country Selection
-          CountryListPick(
+          Row(
+            children: [
+              Text("Select Country:"),
+              const Gap(100),
+              CountryListPick(
             appBar: AppBar(
               backgroundColor: Colors.amber,
               title: const Text('Pick your country'),
@@ -106,6 +111,10 @@ class _SettingPageState extends State<SettingPage> {
               }
             },
           ),
+            ],
+          ),
+          // Country Selection
+          
           const SizedBox(height: 20),
 
           // Language Selection

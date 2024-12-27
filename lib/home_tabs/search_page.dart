@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/components/HomeCard.dart';
+import 'package:news_app/services/api_service.dart' as api;
+
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -9,7 +12,8 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _textController = TextEditingController();
-  List<String> _searchResults = [];
+  List<dynamic> _searchResults = [];
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -17,17 +21,31 @@ class _SearchPageState extends State<SearchPage> {
     super.dispose();
   }
 
-  void _performSearch(String query) {
-    // Simulate a search operation
+  Future<void> _performSearch(String query) async {
     setState(() {
-      _searchResults = List.generate(10, (index) => 'Result $index for "$query"');
+      _isLoading = true;
     });
+    try {
+      final results = await api.SearchNews(query);
+      setState(() {
+        _searchResults = results ?? [];
+      });
+    } catch (e) {
+      print("Error fetching search results: $e");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
+      body: 
+      Container(
+        color: Colors.white,
+        child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -37,18 +55,48 @@ class _SearchPageState extends State<SearchPage> {
               onSearch: _performSearch,
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: _searchResults.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(_searchResults[index]),
-                  );
-                },
-              ),
+              child: _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      itemCount: _searchResults.length,
+                      itemBuilder: (context, index) {
+                        final result = _searchResults[index];
+                        return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => WebViewScreen(url: result["url"], title: result['title'], imgUrl: result['urlToImage']),
+                                    ),
+                                  );
+                                },
+                        
+                        child:  Card(
+                          elevation: 4,
+                          color: Colors.white,
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          child: ListTile(
+                            title: Text(result['title'] ?? 'No Title'),
+                            subtitle: Text(result['description'] ?? 'No Description'),
+                            trailing: result['urlToImage'] != null
+                                ? Image.network(
+                                    result['urlToImage'],
+                                    width: 50,
+                                    height: 50,
+                                    fit: BoxFit.cover,
+                                  )
+                                : null,
+                          ),
+                        )
+                      );
+                      },
+                    ),
             ),
           ],
         ),
       ),
+      )
+      
     );
   }
 }
@@ -69,14 +117,17 @@ class SearchInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 80,
-      decoration: BoxDecoration(boxShadow: [
+      decoration: BoxDecoration(
+        boxShadow: [
         BoxShadow(
           offset: const Offset(12, 26),
           blurRadius: 50,
           spreadRadius: 0,
-          color: Colors.grey.withOpacity(.1),
+          color: Colors.black.withOpacity(.1),
         ),
+          
       ]),
+
       child: TextField(
         controller: textController,
         onChanged: (value) {
@@ -85,7 +136,7 @@ class SearchInput extends StatelessWidget {
         decoration: InputDecoration(
           prefixIcon: const Icon(
             Icons.search,
-            color: Color(0xff4338CA),
+            color: Colors.amber,
           ),
           filled: true,
           fillColor: Colors.white,
@@ -109,3 +160,20 @@ class SearchInput extends StatelessWidget {
     );
   }
 }
+
+// Future<List<dynamic>> SearchNews(String query) async {
+//   const everythingEndpoint1 = "https://example.com/api/news"; // Replace with your endpoint
+//   try {
+//     final response = await http.get(Uri.parse("$everythingEndpoint1&q=$query"));
+//     final responseBody = utf8.decode(response.bodyBytes);
+//     final parsedData = jsonDecode(responseBody);
+
+//     print("###################################");
+//     print("$everythingEndpoint1&q=$query");
+
+//     return parsedData['articles'] as List<dynamic>; // Assuming response contains "articles"
+//   } catch (e) {
+//     print(e);
+//     return [];
+//   }
+// }
