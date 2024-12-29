@@ -16,22 +16,86 @@ String thenewapi_apiKey = "aU30uw5aTpT0va4Ny2HjhVoIp0DjOBalMbP10C2w";
 String headlineEndpoint1 = "https://newsapi.org/v2/top-headlines?apiKey=$newapi_apiKey";
 String everythingEndpoint1 = "https://newsapi.org/v2/everything?apiKey=$newapi_apiKey";
 String headlineEndpoint2 = "https://api.thenewsapi.com/v1/news/top?api_token=$thenewapi_apiKey";
-String everythingEndpint2 = "https://api.thenewsapi.com/v1/news/all?api_token=$thenewapi_apiKey";
+String everythingEndpoint2 = "https://api.thenewsapi.com/v1/news/all?api_token=$thenewapi_apiKey";
 
 Map<String, dynamic> newsData = {};
 Map<String, dynamic> globalnewsData = {};
 Map<String, dynamic> localnewsData = {};
 Map<String, dynamic> searchList = {};
+Map<String, dynamic> allNewsData = {};
 
 // Load User set up data
 Future<void> loadUserSelects() async {
-      final prefs = await SharedPreferences.getInstance();
-      lang = prefs.getString(_savedLanguageKey)?.toLowerCase();
-      topic = prefs.getStringList(_savedTopicsKey);
-      country = prefs.getString(_savedCountryKey)?.toLowerCase();
-      print("Loaded lang: $lang");
-      print("Loaded Topic: $topic");
-      print("Loaded Country: $country");
+  final prefs = await SharedPreferences.getInstance();
+  lang = prefs.getString(_savedLanguageKey)?.toLowerCase();
+  topic = prefs.getStringList(_savedTopicsKey);
+  country = prefs.getString(_savedCountryKey)?.toLowerCase();
+
+  print("Loaded lang: $lang");
+  print("Loaded Topic: $topic");
+  print("Loaded Country: $country");
+}
+
+// Function to sort articles in a Map<String, dynamic> by date
+void sortMapByDate(Map<String, dynamic>? data) {
+  if(data != null){
+    List<dynamic> articles = data["articles"];
+    articles.sort((a, b) {
+      DateTime dateA = DateTime.parse(a['publishedAt']);
+      DateTime dateB = DateTime.parse(b['publishedAt']);
+      return dateB.compareTo(dateA); // Descending order
+    });
+  }
+  
+}
+
+Future<void> homeLocalNew() async {
+  // List of categories
+  List<String> categories = [
+    'sports','business',
+    'health','entertainment','tech','politics',
+    'food','travel',
+  ];
+
+  Map<String, dynamic>? tempNews ;
+  try {
+    // Loop through categories and fetch data
+    for (String category in categories) {
+      final url = Uri.parse('$headlineEndpoint2&categories=$category&locale=$country&language=$lang');
+      print('$headlineEndpoint2?categories=$category&locale=$country&language=$lang');
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        // Parse the JSON response and append it to the list
+        final data = json.decode(response.body);
+
+        // Adapt the JSON structure and append the articles
+        print(data);
+        print("%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        if(tempNews == null){
+          final adaptedData = adaptJson1ToJson2(data);
+          print(adaptedData);
+          // allNewsData.addAll(adaptedData["articles"]);  
+          tempNews = adaptedData;
+        } else {
+          final adaptedData = adaptJson1ToJson2(data);
+          print(adaptedData);
+          // allNewsData.addAll(adaptedData["articles"]);
+          tempNews['articles'].addAll(adaptedData["articles"]);
+        }
+      } else {
+        // Handle HTTP errors
+        print('Failed to fetch news for $category: ${response.statusCode}');
+      }
+    }
+    // Print or use the collected data
+    allNewsData = tempNews ?? {};
+    sortMapByDate(allNewsData);
+    print('All News Data: $allNewsData');
+  } catch (e) {
+    // Handle any other errors
+    print('An error occurred: $e');
+  }
 }
 // Test Demo Json
 Future<void> loadJsonData() async {
@@ -44,10 +108,12 @@ Future<void> loadJsonData() async {
     print("Error loading JSON: $e");
   }
 }
+
 // Get Local News
 Future<void> LocalNews() async {
   try {
-    final response = await http.get(Uri.parse("$everythingEndpoint1&q=bitcoin"));
+    final response = await http.get(Uri.parse("$everythingEndpoint2&language=$lang&locale=$country"));
+    print("$everythingEndpoint1&language=$lang&country=$country");
     final parsedData = jsonDecode(response.body);
     newsData = parsedData;
     
@@ -55,31 +121,35 @@ Future<void> LocalNews() async {
     print("Error loading JSON: $e"); 
   }
 }
+
 // Get Latest News
 Future<void> latestNews() async {
   try {
-    final response = await http.get(Uri.parse("$everythingEndpoint1&q=bitcoin"));
+    final response = await http.get(Uri.parse("$everythingEndpoint1&language=$lang&locale=$country"));
+    print("$everythingEndpoint1&language=$lang&country=$country");
     final parsedData = jsonDecode(response.body);
     newsData = parsedData;
   } catch (e) {
     print("Error loading JSON: $e"); 
   }
 }
+
 // Get Global News
 Future<void> globalNews() async {
   try {
-    final response = await http.get(Uri.parse("$everythingEndpint2&limit=3&language=$lang"));
+    final response = await http.get(Uri.parse("$everythingEndpoint2&limit=3&language=$lang"));
     final responseBody = utf8.decode(response.bodyBytes);
     final parsedData = jsonDecode(responseBody);
     globalnewsData = adaptJson1ToJson2(parsedData);
 
     print("###############################");
-    print("$everythingEndpint2&limit=3&language=$lang");
+    print("$everythingEndpoint2&limit=3&language=$lang");
 
   } catch (e) {
     print("Error loading JSON: $e"); 
   }
 }
+
 // Search News
 Future<dynamic> SearchNews(String query) async {
   try {
@@ -96,6 +166,7 @@ Future<dynamic> SearchNews(String query) async {
     return [];
   }
 }
+
 // News Based on Topic
 Future<dynamic> newsOnTopic(String category) async {
   try {

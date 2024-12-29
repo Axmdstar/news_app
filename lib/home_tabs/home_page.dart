@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:news_app/components/HomeCard.dart';
 import 'package:news_app/components/newfilterCard.dart';
 import 'package:news_app/services/api_service.dart' as api;
@@ -22,9 +21,8 @@ class _HomeContentState extends State<HomeContent> {
   }
 
   Future<void> _loadData() async {
-    // await api.loadJsonData(); // Load JSON data
-    await api.LocalNews();
-    await api.globalNews(); 
+    await api.globalNews();
+    await api.homeLocalNew();
     setState(() {
       isLoading = false; // Set loading to false once data is loaded
     });
@@ -38,14 +36,14 @@ class _HomeContentState extends State<HomeContent> {
         width: double.maxFinite,
         height: double.maxFinite,
         color: Colors.white,
-        child: Center(
+        child: const Center(
           child: CircularProgressIndicator(color: Colors.amberAccent,),
         )
       );
     }
 
     // Check if 'articles' is available in the loaded data
-    final articles = api.newsData['articles'] ?? [];
+    final articles = api.allNewsData['articles'] ?? [];
     final articlesGlobal = api.globalnewsData['articles'] ?? [];
 
     return DefaultTabController(

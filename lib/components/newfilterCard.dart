@@ -31,21 +31,20 @@ class _NewfiltercardState extends State<Newfiltercard> {
       child:  Container(
         margin: EdgeInsets.symmetric(horizontal: 2.0, vertical: 5.0),
         decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 3,
-                          spreadRadius: 2,
-                          offset: const Offset(2, 6)
-                        ),
-                      ],
-                    ),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 3,
+              spreadRadius: 2,
+              offset: const Offset(2, 6)
+            ),
+          ],
+        ),
       height: 123,
       width: double.infinity,
       padding: const EdgeInsets.all(16),
-      // margin: ,
       child: Row(
         children: [
           Container(
@@ -81,13 +80,12 @@ class _NewfiltercardState extends State<Newfiltercard> {
                     fontWeight: FontWeight.w400,
                     height: 0,
                     letterSpacing: -0.56,
-                    overflow: TextOverflow.clip,
+                    overflow: TextOverflow.fade,
                   ),
                 ),
                 Text(
                   DateFormat("MMMM dd, HH:mm")
-    .format(DateFormat("yyyy-MM-ddTHH:mm:ssZ").parse(widget.publishedAt, true)),
-
+                  .format(DateFormat("yyyy-MM-ddTHH:mm:ssZ").parse(widget.publishedAt, true)),
                   style: const TextStyle(
                     color: Color(0xFFA7A5AC),
                     fontSize: 14,
@@ -95,6 +93,7 @@ class _NewfiltercardState extends State<Newfiltercard> {
                     fontWeight: FontWeight.w400,
                     height: 0,
                     letterSpacing: -0.56,
+                    overflow: TextOverflow.fade,
                   ),
                 ),
               ],
