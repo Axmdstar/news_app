@@ -52,7 +52,7 @@ void sortMapByDate(Map<String, dynamic>? data) {
 Future<void> homeLocalNew() async {
   // List of categories
   List<String> categories = [
-    'sports','business',
+    'sports','business','general'
     'health','entertainment','tech','politics',
     'food','travel',
   ];
@@ -61,7 +61,7 @@ Future<void> homeLocalNew() async {
   try {
     // Loop through categories and fetch data
     for (String category in categories) {
-      final url = Uri.parse('$headlineEndpoint2&categories=$category&locale=$country&language=$lang');
+      final url = Uri.parse('$headlineEndpoint2&categories=$category&language=$lang');
       print('$headlineEndpoint2?categories=$category&locale=$country&language=$lang');
       final response = await http.get(url);
 

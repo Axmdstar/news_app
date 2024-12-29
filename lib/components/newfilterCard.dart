@@ -29,7 +29,7 @@ class _NewfiltercardState extends State<Newfiltercard> {
         );
       },
       child:  Container(
-        margin: EdgeInsets.symmetric(horizontal: 2.0, vertical: 5.0),
+        margin: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 5.0),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),

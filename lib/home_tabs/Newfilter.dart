@@ -40,9 +40,9 @@ class _NewsfilterState extends State<Newsfilter> {
           TabBar(
             labelColor: Colors.black,
             isScrollable: true,
-            labelPadding: EdgeInsets.symmetric(horizontal: 20.0),
-            textScaler: TextScaler.linear(1.0),
-            labelStyle: TextStyle(
+            labelPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+            textScaler: const TextScaler.linear(1.0),
+            labelStyle: const TextStyle(
               fontFamily: "Montserrat",
               fontWeight: FontWeight.w600
             ),

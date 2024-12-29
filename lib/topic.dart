@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:news_app/home.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
 import "package:news_app/components/primary_button.dart";

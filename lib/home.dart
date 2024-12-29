@@ -40,7 +40,7 @@ class _NavigationExampleState extends State<NavigationExample> {
         },
         indicatorColor: Colors.amber,
         selectedIndex: currentPageIndex,
-        indicatorShape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+        indicatorShape: const CircleBorder(side: BorderSide(color: Colors.transparent)),
         elevation: 12,
         destinations: const <Widget>[
           NavigationDestination(
@@ -106,7 +106,7 @@ class _NavigationExampleState extends State<NavigationExample> {
             Expanded(
               child: <Widget>[
                 const HomeContent(),
-                SearchPage(),
+                const SearchPage(),
                 const Newsfilter(),
                 const BookMarkPage(),
               ][currentPageIndex],
