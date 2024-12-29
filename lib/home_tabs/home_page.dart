@@ -46,6 +46,20 @@ class _HomeContentState extends State<HomeContent> {
     final articles = api.allNewsData['articles'] ?? [];
     final articlesGlobal = api.globalnewsData['articles'] ?? [];
 
+    if (articles.isEmpty && articlesGlobal.isEmpty) {
+      return Container(
+        width: double.maxFinite,
+        height: double.maxFinite,
+        color: Colors.white,
+        child: const Center(
+          child: Text(
+            'No articles available',
+            style: TextStyle(fontSize: 18, color: Colors.black),
+          ),
+        ),
+      );
+    }
+
     return DefaultTabController(
       length: 3,
       child: Container(

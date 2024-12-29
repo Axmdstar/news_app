@@ -85,8 +85,8 @@ class _SettingPageState extends State<SettingPage> {
         children: [
           Row(
             children: [
-              const Text("Select Country:"),
-              const Gap(80),
+              Text("Select Country:"),
+              const Gap(100),
               CountryListPick(
             appBar: AppBar(
               backgroundColor: Colors.amber,
