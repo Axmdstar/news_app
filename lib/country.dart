@@ -35,7 +35,7 @@ class MyAppState extends State<CountryPicker> {
   Future<void> _loadCountry() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      selectedCountry = prefs.getString(_savedCountryKey);
+      selectedCountry = "us";
     });
     print("Loaded Country: $selectedCountry");
   }
@@ -90,7 +90,7 @@ class MyAppState extends State<CountryPicker> {
                       showEnglishName: false,
                       labelColor: Colors.blueAccent,
                     ),
-                    initialSelection: '+252',
+                    initialSelection: "us",
                     onChanged: (CountryCode? code) async {
                       if (code != null) {
                         setState(() {

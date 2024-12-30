@@ -12,7 +12,7 @@ String? country;
 List<String>? topic;
 
 String newapi_apiKey = "449ff74ff0cb449186ca96375e940f5c";
-String thenewapi_apiKey = "aU30uw5aTpT0va4Ny2HjhVoIp0DjOBalMbP10C2w";
+String thenewapi_apiKey = "RfCNAehYE5W3yLnf4Yeh2lTbDm8Oa1x32lOoYk5W";
 String headlineEndpoint1 = "https://newsapi.org/v2/top-headlines?apiKey=$newapi_apiKey";
 String everythingEndpoint1 = "https://newsapi.org/v2/everything?apiKey=$newapi_apiKey";
 String headlineEndpoint2 = "https://api.thenewsapi.com/v1/news/top?api_token=$thenewapi_apiKey";
@@ -48,6 +48,7 @@ void sortMapByDate(Map<String, dynamic>? data) {
   }
   
 }
+
 
 Future<void> homeLocalNew() async {
   // List of categories
@@ -113,7 +114,6 @@ Future<void> loadJsonData() async {
 Future<void> LocalNews() async {
   try {
     final response = await http.get(Uri.parse("$everythingEndpoint2&language=$lang&locale=$country"));
-    print("$everythingEndpoint1&language=$lang&country=$country");
     final parsedData = jsonDecode(response.body);
     newsData = parsedData;
     
@@ -125,10 +125,14 @@ Future<void> LocalNews() async {
 // Get Latest News
 Future<void> latestNews() async {
   try {
-    final response = await http.get(Uri.parse("$everythingEndpoint1&language=$lang&locale=$country"));
-    print("$everythingEndpoint1&language=$lang&country=$country");
-    final parsedData = jsonDecode(response.body);
-    newsData = parsedData;
+    final response = await http.get(Uri.parse("https://newsdata.io/api/1/latest?apikey=pub_63802b31ef5c76b088e353f9eae1f6ca53452&language=$lang&country=$country"));
+    final responseBody = utf8.decode(response.bodyBytes);
+    final parsedData = jsonDecode(responseBody);
+    allNewsData = adaptnewdataToJson1(parsedData);
+    print(parsedData);
+    print("##############################################");
+    print("$everythingEndpoint1&language=$lang&locale=$country");
+    print(newsData);
   } catch (e) {
     print("Error loading JSON: $e"); 
   }
@@ -170,14 +174,14 @@ Future<dynamic> SearchNews(String query) async {
 // News Based on Topic
 Future<dynamic> newsOnTopic(String category) async {
   try {
-    final response = await http.get(Uri.parse("$headlineEndpoint1&category=$category"));
+    final response = await http.get(Uri.parse("https://newsdata.io/api/1/latest?apikey=pub_63802b31ef5c76b088e353f9eae1f6ca53452&language=$lang&category=$category"));
     final responseBody = utf8.decode(response.bodyBytes);
     final parsedData = jsonDecode(responseBody);
 
     print("###################################");
-    print("$headlineEndpoint1&category=$category");
-
-    return parsedData['articles'] as List<dynamic>; // Assuming the response contains "articles"
+    print("https://newsdata.io/api/1/latest?apikey=pub_63802b31ef5c76b088e353f9eae1f6ca53452&language=$lang&category=$category");
+    final adpt = adaptnewdataToJson1(parsedData);
+    return adpt['articles'] as List<dynamic>; // Assuming the response contains "articles"
   } catch (e) {
     print(e);
     return [];
@@ -202,6 +206,29 @@ Map<String, dynamic> adaptJson1ToJson2(Map<String, dynamic> json1) {
         "urlToImage": item["image_url"],
         "publishedAt": item["published_at"],
         "content": null
+      };
+    }).toList(),
+  };
+}
+
+
+Map<String, dynamic> adaptnewdataToJson1(Map<String, dynamic> json2) {
+  return {
+    "status": "ok",
+    "totalResults": json2["totalResults"],
+    "articles": json2["results"].map((item) {
+      return {
+        "source": {
+          "id": null,
+          "name": item["source_name"] ?? item["source_id"]
+        },
+        "author": item["creator"]?.isNotEmpty == true ? item["creator"].first : null,
+        "title": item["title"],
+        "description": item["description"],
+        "url": item["link"],
+        "urlToImage": item["image_url"],
+        "publishedAt": item["pubDate"],
+        "content": item["content"] != "ONLY AVAILABLE IN PAID PLANS" ? item["content"] : null,
       };
     }).toList(),
   };

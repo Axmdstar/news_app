@@ -83,10 +83,16 @@ class _TopicsCardsState extends State<TopicsCards> {
                           width: 124,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
-                            image: DecorationImage(
-                              image: NetworkImage(article['urlToImage'] ?? ''),
-                              fit: BoxFit.cover,
-                            ),
+                            // image: DecorationImage(
+                            //   image: NetworkImage(article['urlToImage'] ?? ''),
+                            //   fit: BoxFit.cover,
+                            // ),
+                             image: DecorationImage(
+    image: article['urlToImage'] != null && article['urlToImage'] != ''
+        ? NetworkImage(article['urlToImage'])
+        : AssetImage("images/News.png"),
+    fit: BoxFit.contain,
+  ),
                           ),
                         ),
                         const Gap(16),

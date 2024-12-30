@@ -44,6 +44,33 @@ class _SettingPageState extends State<SettingPage> {
     "travel": Icons.flight,
   };
 
+  Future<void> _showMyDialog() async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Saved'),
+        content: const SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text('Restart App for changes to take effect'),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Ok'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
   @override
   void initState() {
     super.initState();
@@ -107,6 +134,7 @@ class _SettingPageState extends State<SettingPage> {
                   selectedCountry = code.code;
                 });
                 await _saveCountry(code.code!);
+                _showMyDialog();
                 print("Saved Country: ${code.name}");
               }
             },
